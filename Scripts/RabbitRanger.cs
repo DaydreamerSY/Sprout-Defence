@@ -112,20 +112,19 @@ public partial class RabbitRanger : Node2D
 		temp_bullet.GlobalPosition = this.GlobalPosition;
 
 		var target = this.current_attacking_enemy[0];
+		temp_bullet.LookAt(target.GlobalPosition);
 
 		tween.TweenProperty(
 			temp_bullet, 
 			"global_position", 
 			target.GlobalPosition, 
 			// 1f);
-			attack_interval);
+			projectile_speed);
 		tween.Play();
-		
-		var callback = new Callable(this, nameof(dealDamage));
 
 		// callback.Call(target);
 		tween.TweenCallback(Callable.From(temp_bullet.QueueFree));
-		tween.TweenCallback(callback);
+		tween.TweenCallback(Callable.From(this.dealDamage));
 		tween.TweenCallback(Callable.From(tween.Kill));
 	}
 

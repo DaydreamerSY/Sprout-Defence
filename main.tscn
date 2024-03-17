@@ -1105,9 +1105,10 @@ format = 2
 [node name="RabbitRanger" type="Node2D" parent="Rabbits" node_paths=PackedStringArray("attack_range")]
 position = Vector2(56, 40)
 script = ExtResource("3_0jk3i")
+attack_damage = 0
+attack_interval = 0.25
 attack_range = NodePath("AttackArea")
 direction = "West"
-projectile_speed = 3000.0
 bullet_path = "res://Scene/ProjectileStone.tscn"
 
 [node name="Skin" type="AnimatedSprite2D" parent="Rabbits/RabbitRanger"]
