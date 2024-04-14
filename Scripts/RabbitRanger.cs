@@ -4,180 +4,186 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class RabbitRanger : Node2D
+public partial class RabbitRanger : Rabbit
 {
-	[ExportGroup("Attributes")]
-	[Export] public int attack_damage = 5;
-	[Export] public float attack_interval = 0.5f;
-	[Export] public Area2D attack_range;
+	// [ExportGroup("Attributes")]
+	// [Export] public int _attack_damage = 5;
+	// [Export] public float _attack_interval = 0.5f;
+	// [Export] public Area2D _attack_range;
 	private float attack_waittime = 0;
-	[Export(PropertyHint.Enum, "North,East,West,South")] public String direction = "East";
-	[Export] public bool _test_change_direction = false;
-	[Export] float projectile_speed = 1f;
-	[Export] string bullet_path;
-	private PackedScene bullet;
+	// [Export(PropertyHint.Enum, "North,East,West,South")] public String _direction = "East";
+	// // [Export] public bool _test_change_direction = false;
+	// [Export] float _projectile_speed = 0.25f;
+	// [Export] string _bullet_path;
+	// private PackedScene _bullet;
 
 
-	private bool isAttacking = false;
-	private bool isReadyToAttack = true;
-	private List<Cow> enemy_list = new List<Cow>();
-	private List<Cow> current_attacking_enemy = new List<Cow>();
+	private bool _isAttacking = false;
+	private bool _isReadyToAttack = true;
+	private List<Cow> _enemy_list = new List<Cow>();
+	private List<Cow> _current_attacking_enemy = new List<Cow>();
+	private Cow _current_target;
 
-	// private CustomSignalSingleton _customSignalSingleton;
-
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		bullet = GD.Load<PackedScene>(bullet_path);
+	public RabbitRanger(){
+		// attack_damage = _attack_damage;
+		// attack_interval = _attack_interval;
+		// attack_range = _attack_range;
+		// direction = _direction;
+		// projectile_speed = _projectile_speed;
+		// bullet_path = _bullet_path;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-		// isAttacking = attack_range.HasOverlappingAreas();
-		// attack_timer.Timeout += _on_attack_interval_timeout;
-		// Logger.Instance.Print($"{enemy_list.Count}");
-		if (enemy_list.Count > 0)
-		{
 
-			if (isReadyToAttack)
-			{
-				Logger.Instance.Print($"Going to attack: {enemy_list.Count}");
-				_attack();
-				attack_waittime = 0;
-				isReadyToAttack = false;
-			}
+	// // Called when the node enters the scene tree for the first time.
+	// public override void _Ready()
+	// {
+	// 	bullet = GD.Load<PackedScene>(bullet_path);
+	// }
 
-		}
+	// // Called every frame. 'delta' is the elapsed time since the previous frame.
+	// public override void _Process(double delta)
+	// {
+	// 	if (enemy_list.Count > 0)
+	// 	{
 
-		attack_waittime = timer(delta, attack_waittime);
-		if (attack_waittime > attack_interval)
-		{
-			isReadyToAttack = true;
-		}
+	// 		if (isReadyToAttack)
+	// 		{
+	// 			Logger.Instance.Print($"Going to attack: {enemy_list.Count}");
+	// 			_attack();
+	// 			attack_waittime = 0;
+	// 			isReadyToAttack = false;
+	// 		}
 
-		if (_test_change_direction)
-		{
-			_updateDirection(direction);
-			_test_change_direction = false;
-		}
-	}
+	// 	}
 
-	private void _on_attack_area_area_entered(Area2D area)
-	{
+	// 	attack_waittime = timer(delta, attack_waittime);
+	// 	if (attack_waittime > attack_interval)
+	// 	{
+	// 		isReadyToAttack = true;
+	// 	}
 
-		if (area.IsInGroup("Enemy"))
-		{
-			var enemy = area.GetParent();
+	// 	if (_test_change_direction)
+	// 	{
+	// 		_updateDirection(direction);
+	// 		_test_change_direction = false;
+	// 	}
+	// }
 
-			if (enemy is Cow cow)
-			{
-				if (!enemy_list.Contains(enemy)) {
-					cow.isAlive();
-					enemy_list.Add(cow);
-					current_attacking_enemy.Add(cow);
-				}
+	// private void _on_attack_area_area_entered(Area2D area)
+	// {
+
+	// 	if (area.IsInGroup("Enemy"))
+	// 	{
+	// 		var enemy = area.GetParent();
+
+	// 		if (enemy is Cow cow)
+	// 		{
+	// 			if (!enemy_list.Contains(enemy)) {
+	// 				cow.isAlive();
+	// 				enemy_list.Add(cow);
+	// 				current_attacking_enemy.Add(cow);
+	// 			}
 				
-			}
+	// 		}
 
-			Logger.Instance.Print("Enemy enter attack range");
-		}
-		Logger.Instance.Print($"enemy list: {enemy_list.Count}");
-	}
+	// 		Logger.Instance.Print("Enemy enter attack range");
+	// 	}
+	// 	Logger.Instance.Print($"enemy list: {enemy_list.Count}");
+	// }
 
-	private void _on_attack_area_area_exited(Area2D area)
-	{
+	// private void _on_attack_area_area_exited(Area2D area)
+	// {
 
-		if (area.IsInGroup("Enemy"))
-		{
-			var enemy = area.GetParent();
+	// 	if (area.IsInGroup("Enemy"))
+	// 	{
+	// 		var enemy = area.GetParent();
 
-			if (enemy is Cow cow)
-			{
-				cow.isAlive();
-				enemy_list.Remove(cow);
-				current_attacking_enemy.Remove(cow);
-			}
+	// 		if (enemy is Cow cow)
+	// 		{
+	// 			cow.isAlive();
+	// 			enemy_list.Remove(cow);
+	// 			current_attacking_enemy.Remove(cow);
+	// 		}
 
-			Logger.Instance.Print("Enemy exit attack range");
-		}
-		Logger.Instance.Print($"enemy list: {enemy_list.Count}");
-	}
+	// 		Logger.Instance.Print("Enemy exit attack range");
+	// 	}
+	// 	Logger.Instance.Print($"enemy list: {enemy_list.Count}");
+	// }
 
-	private void fireBulletV2(){	
-		Tween tween = GetTree().CreateTween();
-		var temp_bullet = bullet.Instantiate<Node2D>();
-		GetNode("../../ProjectileLayers").AddChild(temp_bullet);
-		temp_bullet.GlobalPosition = this.GlobalPosition;
+	// private void fireBulletV2(){	
+	// 	Tween tween = GetTree().CreateTween();
+	// 	var temp_bullet = bullet.Instantiate<Node2D>();
+	// 	GetNode("../../ProjectileLayers").AddChild(temp_bullet);
+	// 	temp_bullet.GlobalPosition = this.GlobalPosition;
 
-		var target = this.current_attacking_enemy[0];
-		temp_bullet.LookAt(target.GlobalPosition);
+	// 	current_target = this.current_attacking_enemy[0];
+	// 	temp_bullet.LookAt(current_target.GlobalPosition);
 
-		tween.TweenProperty(
-			temp_bullet, 
-			"global_position", 
-			target.GlobalPosition, 
-			// 1f);
-			projectile_speed);
-		tween.Play();
+	// 	tween.TweenProperty(
+	// 		temp_bullet, 
+	// 		"global_position", 
+	// 		current_target.GlobalPosition, 
+	// 		// 1f);
+	// 		projectile_speed);
+	// 	tween.Play();
 
-		// callback.Call(target);
-		tween.TweenCallback(Callable.From(temp_bullet.QueueFree));
-		tween.TweenCallback(Callable.From(this.dealDamage));
-		tween.TweenCallback(Callable.From(tween.Kill));
-	}
+	// 	// callback.Call(target);
+	// 	tween.TweenCallback(Callable.From(temp_bullet.QueueFree));
+	// 	tween.TweenCallback(Callable.From(this.dealDamage));
+	// 	tween.TweenCallback(Callable.From(tween.Kill));
+	// }
 
-	private void dealDamage() {
-		current_attacking_enemy[0].BeAttackBy(attack_damage);
-	}
-
-
-	private void _attack()
-	{
-		Logger.Instance.Print($"Attacking...");
+	// private void dealDamage() {
+	// 	current_target.BeAttackBy(attack_damage);
+	// 	current_target = null;
+	// }
 
 
-		if (this.enemy_list[0].isAlive())
-		{
-			Logger.Instance.Print($"Attack enemy at position {this.enemy_list[0].GlobalPosition}");
-			fireBulletV2();
-			// this.enemy_list[0].BeAttackBy(attack_damage);
-		}
-		else
-		{
-			Logger.Instance.Print($"Enemy isAlive: {this.enemy_list[0].isAlive()}");
-			Logger.Instance.Print($"Remove from list");
-			this.enemy_list.RemoveAt(0);
-		}
+	// private void _attack()
+	// {
+	// 	Logger.Instance.Print($"Attacking...");
 
-		// _customSignalSingleton.EmitSignal(nameof(CustomSignalSingleton.getDamgeByPlayerEventHandler), this.attack_damage);
-	}
 
-	private float timer(double delta, float a)
-	{
-		return a += 1 * (float)delta;
-	}
+	// 	if (this.enemy_list[0].isAlive())
+	// 	{
+	// 		Logger.Instance.Print($"Attack enemy at position {this.enemy_list[0].GlobalPosition}");
+	// 		fireBulletV2();
+	// 		// this.enemy_list[0].BeAttackBy(attack_damage);
+	// 	}
+	// 	else
+	// 	{
+	// 		Logger.Instance.Print($"Enemy isAlive: {this.enemy_list[0].isAlive()}");
+	// 		Logger.Instance.Print($"Remove from list");
+	// 		this.enemy_list.RemoveAt(0);
+	// 	}
 
-	private void _updateDirection(String direction)
-	{
+	// 	// _customSignalSingleton.EmitSignal(nameof(CustomSignalSingleton.getDamgeByPlayerEventHandler), this.attack_damage);
+	// }
 
-		switch (direction)
-		{
-			case "North":
-				this.RotationDegrees = -90;
-				break;
-			case "East":
-				this.RotationDegrees = 0;
-				break;
-			case "South":
-				this.RotationDegrees = 90;
-				break;
-			case "West":
-				this.RotationDegrees = 180;
-				break;
+	// private float timer(double delta, float a)
+	// {
+	// 	return a += 1 * (float)delta;
+	// }
 
-		}
+	// private void _updateDirection(String direction)
+	// {
 
-	}
+	// 	switch (direction)
+	// 	{
+	// 		case "North":
+	// 			this.RotationDegrees = -90;
+	// 			break;
+	// 		case "East":
+	// 			this.RotationDegrees = 0;
+	// 			break;
+	// 		case "South":
+	// 			this.RotationDegrees = 90;
+	// 			break;
+	// 		case "West":
+	// 			this.RotationDegrees = 180;
+	// 			break;
+
+	// 	}
+
+	// }
 }

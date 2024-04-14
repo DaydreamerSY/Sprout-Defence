@@ -1081,9 +1081,25 @@ sources/0 = SubResource("TileSetAtlasSource_g5c8c")
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 8.0
 offset_right = 320.0
-offset_bottom = 188.0
+offset_bottom = 180.0
+
+[node name="Top bar" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 21.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="UI/Top bar"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Pause" type="TextureButton" parent="UI/Top bar"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Map" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_ocil4")
@@ -1105,10 +1121,7 @@ format = 2
 [node name="RabbitRanger" type="Node2D" parent="Rabbits" node_paths=PackedStringArray("attack_range")]
 position = Vector2(56, 40)
 script = ExtResource("3_0jk3i")
-attack_damage = 0
-attack_interval = 0.25
 attack_range = NodePath("AttackArea")
-direction = "West"
 bullet_path = "res://Scene/ProjectileStone.tscn"
 
 [node name="Skin" type="AnimatedSprite2D" parent="Rabbits/RabbitRanger"]

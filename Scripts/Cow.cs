@@ -76,6 +76,7 @@ public partial class Cow : Node2D
 		// if (isMoving){
 		// 	if (current_position != move_to_this_node)
 		// }
+
 	}
 
 	private void setDefaultState()
@@ -117,6 +118,7 @@ public partial class Cow : Node2D
 				Godot.Vector2 target_position = move_ground_map.MapToLocal(current_id_path[0]);
 				GlobalPosition = GlobalPosition.MoveToward(target_position, speed);
 
+
 				if (GlobalPosition == target_position)
 				{
 					current_id_path.RemoveAt(0);
@@ -139,6 +141,8 @@ public partial class Cow : Node2D
 	public void BeAttackBy(float dmg){
 		this.health -= dmg;
 		healthbar.Value = this.health;
+
+		Logger.Instance.Print($"Cow's health: {this.health}");
 		
 		if(this.health <= 0){
 			alive = false;
